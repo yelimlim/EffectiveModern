@@ -67,10 +67,13 @@ auto derefLess =
 C++14에는 위와 같이 람다 매개변수에도 auto를 사용할 수 있다.
 
 > std::function
+
 C++11 표준 라이브러리 템플릿이다. 
 함수 포인터 개념을 일반화한 것이다.
 함수 포인터는 함수만 가리키지만 std::function은 호출만 가능하면 사용할 수 있다.
 함수 포인터가 함수의 형식을 지정해야 하는 것처럼 std::function도 함수의 형식을 지정해야 한다.
+
+* 간결함
 
 ```cpp
 // 함수의 서명 = 함수의 형식
@@ -84,12 +87,16 @@ std::function<bool(const std::unique_ptr<Widget>&,
 ```
 auto를 사용할 때가 더 간결한 것을 볼 수 있다.
 
-> auto와 메모리
+* 메모리
+
 auto로 선언된 클로저를 담는 변수는 클로저와 같은 형식이다.
 따라서 클로저에서 요구하는 만큼 메모리를 사용한다.
-하지만 std::function으로 사용할 경우 
+하지만 std::function으로 사용할 경우 고정된 std::function 탬플릿 인스턴스 크기보다 클로저의 크기가 크면 힙 메모리를 할당해서 클로저를 저장한다.
+대부분의 경우 auto를 사용하는 것보다 std::function을 사용할 때 더 많은 메모리를 차지하게 된다.
 
+* 속도
 
+std::function은 인라인화를 제한하고 간접 함수 호출을 산출하기 때문에 auto보다 호출 속도가 느리다.
 
 
 
@@ -127,3 +134,17 @@ auto로 선언된 클로저를 담는 변수는 클로저와 같은 형식이다
 
 ## 질문들
 > 클로저 형식이란?
+* std::function 객체(?)
+
+> std::function - 인라인?
+* std::function은 호출 가능한 모든 것을 포함한다.
+* 따라서 컴파일 타임에 std::function으로 무엇을 저장할지 알 수 없다.
+
+> std::function - 간접 함수 호출?
+* https://challenger100.wordpress.com/2016/03/18/stdfunction%EC%9D%80-%EC%95%84%EC%A3%BC-%EB%8A%90%EB%A6%AC%EB%8B%A4-%EB%9E%8C%EB%8B%A4%EB%A5%BC-%EC%82%AC%EC%9A%A9%ED%95%98%EC%9E%90/
+* https://probablydance.com/2013/01/13/a-faster-implementation-of-stdfunction/
+* https://blog.demofox.org/2015/02/25/avoiding-the-performance-hazzards-of-stdfunction/
+* 뭥가... 람다를 std::function으로 받으면 람다는 코드와 캡처를 포함하는 클래스를 생성하기 때문에
+* std::function은 해당 객체의 타입을 알 수 없고 그래서 가상 함수를 호출하게 되는데 이 때 시간이 좀 걸린다.
+
+

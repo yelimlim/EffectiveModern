@@ -6,7 +6,7 @@
 
 > reference capture mode 문제점
 * dangling의 위험성이 있다.
-** dangling 예시
+  * dangling 예시
 ```cpp
 using FilterContainer = std::vector<std::function<bool(int)>>;
 FilterContainer filters;
